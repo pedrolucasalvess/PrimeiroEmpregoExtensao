@@ -1,0 +1,21 @@
+{% extends 'web/base.html' %}
+{% block title %}Vagas{% endblock %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-4">Vagas Disponíveis</h2>
+<form method="get" class="mb-4">
+    <input name="q" value="{{ query }}" placeholder="Pesquisar vaga..." class="border p-2 rounded w-full max-w-md inline-block">
+    <button class="px-4 py-2 bg-blue-600 text-white rounded ml-2">Pesquisar</button>
+</form>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {% for vaga in vagas %}
+    <div class="bg-white p-4 rounded shadow">
+        <h3 class="font-bold text-lg">{{ vaga.titulo }}</h3>
+        <p class="text-gray-600">{{ vaga.descricao }}</p>
+        <p class="text-sm text-gray-500">Empresa: {{ vaga.empresa.nome }} — {{ vaga.cidade }}</p>
+        <p class="text-sm text-gray-400">Publicado em: {{ vaga.criado_em|date:'d/m/Y H:i' }}</p>
+    </div>
+    {% empty %}
+    <p>Nenhuma vaga encontrada.</p>
+    {% endfor %}
+</div>
+{% endblock %}

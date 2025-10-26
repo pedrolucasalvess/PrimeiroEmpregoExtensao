@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>PrimeiroEmprego - {% block title %}{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="{% static 'web/style.css' %}">
+</head>
+<body class="bg-gray-100 font-sans text-gray-800">
+    <div class="min-h-screen flex flex-col">
+        <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow p-4">
+            <div class="container mx-auto flex items-center justify-between">
+                <h1 class="text-2xl font-bold">PrimeiroEmprego</h1>
+                <nav class="flex gap-4 items-center">
+                    <a href="/" class="hover:underline">Início</a>
+
+                    {% if request.session.user_type %}
+                        <!-- Menu para Alunos -->
+                        {% if request.session.user_type == 'aluno' %}
+                            <a href="/vagas/" class="hover:underline">Ver Vagas</a>
+                            <a href="/candidato/" class="hover:underline">Candidaturas</a>
+                            <a href="/perfil/" class="hover:underline">Meu Perfil</a>
+
+                        <!-- Menu para Empresas -->
+                        {% elif request.session.user_type == 'empresa' %}
+                            <a href="/empresa/" class="hover:underline">Minhas Vagas</a>
+
+                        <!-- Menu para Admin -->
+                        {% elif request.session.user_type == 'admin' %}
+                            <a href="/admin/" class="hover:underline">Painel Admin</a>
+                        {% endif %}
+
+                        <span class="text-sm bg-white/20 px-3 py-1 rounded">{{ request.session.user_name }}</span>
+                        <a href="/logout/" class="bg-red-500 hover:bg-red-600 px-3 py-1 rounded">Sair</a>
+                    {% else %}
+                        <a href="/login/" class="bg-white text-blue-600 hover:bg-gray-100 px-3 py-1 rounded font-semibold">Entrar</a>
+                    {% endif %}
+                </nav>
+            </div>
+        </header>
+        <main class="flex-grow container mx-auto p-6">
+            {% if messages %}
+                <div class="space-y-2 mb-4">
+                    {% for m in messages %}
+                        {% if m.level_tag == 'success' %}
+                            <div class="p-3 rounded bg-green-100 text-green-800">
+                                {{ m }}
+                            </div>
+                        {% elif m.level_tag == 'warning' %}
+                            <div class="p-3 rounded bg-yellow-100 text-yellow-800">
+                                {{ m }}
+                            </div>
+                        {% else %}
+                            <div class="p-3 rounded bg-red-100 text-red-800">
+                                {{ m }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% block content %}{% endblock %}
+        </main>
+        <footer class="bg-gray-800 text-white p-4 text-center">
+            &copy; 2025 PrimeiroEmprego
+        </footer>
+    </div>
+</body>
+</html>
